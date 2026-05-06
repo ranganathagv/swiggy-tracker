@@ -1,0 +1,45 @@
+name: Swiggy Stock Tracker
+
+on:
+  schedule:
+    # All times in UTC — IST is UTC+5:30
+    # 09:07 IST = 03:37 UTC
+    - cron: '37 3 * * 1-5'
+    # 09:15 IST = 03:45 UTC
+    - cron: '45 3 * * 1-5'
+    # 10:15 IST = 04:45 UTC
+    - cron: '45 4 * * 1-5'
+    # 12:00 IST = 06:30 UTC
+    - cron: '30 6 * * 1-5'
+    # 15:00 IST = 09:30 UTC
+    - cron: '30 9 * * 1-5'
+    # 15:15 IST = 09:45 UTC
+    - cron: '45 9 * * 1-5'
+    # 15:30 IST = 10:00 UTC
+    - cron: '0 10 * * 1-5'
+    # 15:50 IST = 10:20 UTC
+    - cron: '20 10 * * 1-5'
+
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  fetch-swiggy-price:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install bsedata requests pytz
+
+      - name: Run Swiggy tracker
+        env:
+          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python swiggy_alert.py

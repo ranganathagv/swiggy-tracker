@@ -18,6 +18,14 @@ def send_telegram(message):
         "text":       message,
         "parse_mode": "Markdown"
     })
+    result = resp.json()
+    if not resp.ok:
+        # Print exact Telegram error so we can debug
+        print(f"❌ Telegram error: {result.get('error_code')} — {result.get('description')}")
+        print(f"   Chat ID used: {TELEGRAM_CHAT_ID}")
+        print(f"   Token (last 6): ...{TELEGRAM_TOKEN[-6:]}")
+    else:
+        print(f"✅ Telegram delivered to chat_id: {TELEGRAM_CHAT_ID}")
     return resp.ok
 
 def fetch_and_notify():
@@ -61,7 +69,6 @@ def fetch_and_notify():
         )
 
         ok = send_telegram(msg)
-        print(f"[{now_str}] ✅ Telegram sent: {ok} | LTP ₹{price} | {pct_change}%")
 
         file_exists = os.path.isfile(CSV_FILE)
         with open(CSV_FILE, "a", newline="") as f:

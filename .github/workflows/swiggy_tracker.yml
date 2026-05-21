@@ -2,15 +2,11 @@ name: Swiggy Stock Tracker
 
 on:
   schedule:
-    - cron: '37 3 * * 1-5'
-    - cron: '45 3 * * 1-5'
-    - cron: '45 4 * * 1-5'
-    - cron: '30 6 * * 1-5'
-    - cron: '30 9 * * 1-5'
-    - cron: '45 9 * * 1-5'
-    - cron: '0 10 * * 1-5'
-    - cron: '20 10 * * 1-5'
-
+  - cron: '45 3 * * 1-5'   # 09:15 IST - Market open
+  - cron: '30 6 * * 1-5'   # 12:00 IST - Midday  
+  - cron: '45 9 * * 1-5'   # 15:15 IST - Near close
+  - cron: '20 10 * * 1-5'  # 15:50 IST - Final capture
+  
 jobs:
   fetch-swiggy-price:
     runs-on: ubuntu-latest
